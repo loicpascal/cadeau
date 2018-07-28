@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Votre compte{% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+    <h1>Votre compte</h1>
+    {% for message in app.flashes('danger') %}
+    <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+    <div class="row">
+        <div class="col">
+            <h2>Vos informations</h2>
+            {% for message in app.flashes('successInfosUpdate') %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            {{ form_start(formInfos) }}
+            <div class="form-group">
+                {{ form_label(formInfos.lastname) }}
+                {{ form_errors(formInfos.lastname) }}
+                {{ form_widget(formInfos.lastname, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(formInfos.firstname) }}
+                {{ form_errors(formInfos.firstname) }}
+                {{ form_widget(formInfos.firstname, {'attr' : {'class' : 'form-control', 'placeholder' : 'Prénom'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(formInfos.email) }}
+                {{ form_errors(formInfos.email) }}
+                {{ form_widget(formInfos.email, {'attr' : {'class' : 'form-control', 'placeholder' : 'Prénom'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(formInfos.birthdate) }}
+                {{ form_errors(formInfos.birthdate) }}
+                {{ form_widget(formInfos.birthdate, {'attr' : {'class' : 'form-control'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(formInfos.username) }}
+                {{ form_errors(formInfos.username) }}
+                {{ form_widget(formInfos.username, {'attr' : {'class' : 'form-control', 'placeholder' : 'Identifiant'}}) }}
+            </div>
+
+            <div>
+                {{ form_widget(formInfos.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+                {% if user.idees|length %}
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#deleteAllIdees">Supprimer mes idées <span class="badge badge-light">{{ user.idees|length }}</span></button>
+                {{  include('include/modal.html.twig', {'id_modal' : 'deleteAllIdees','title' : 'Supprimer toutes vos idées', 'route' : path('user_idees_delete')}) }}
+                {% endif %}
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteUser">Supprimer mon compte</button>
+                {{ include('include/modal.html.twig', {'id_modal' : 'deleteUser','title' : 'Supprimer votre compte', 'route' : path('user_delete') }) }}
+            </div>
+            {{ form_end(formInfos) }}
+        </div>
+
+        <div class="col">
+            <h2>Votre mot de passe</h2>
+            {% for message in app.flashes('successPwdUpdate') %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            {% for message in app.flashes('dangerPwdUpdate') %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+            {{ form_start(formPwd) }}
+            <div class="form-group">
+                {{ form_label(formPwd.plainPassword.first) }}
+                {{ form_errors(formPwd.plainPassword.first) }}
+                {{ form_widget(formPwd.plainPassword.first, {'attr' : {'class' : 'form-control'}}) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(formPwd.plainPassword.second) }}
+                {{ form_errors(formPwd.plainPassword.second) }}
+                {{ form_widget(formPwd.plainPassword.second, {'attr' : {'class' : 'form-control'}}) }}
+            </div>
+
+            <div>
+                {{ form_widget(formPwd.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+            </div>
+            {{ form_end(formPwd) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

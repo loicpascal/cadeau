@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Ma liste{% endblock %}
+
+{% block body %}
+
+    <h1>Mes idées</h1>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    <div>
+        {% if not idees %}
+        <div class="alert alert-warning">Vous n'avez aucune idée de cadeau. <a href="{{ path('idee_new') }}" class="alert-link">J'ajoute une idée !</a></div>
+        {%  else %}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Idée</th>
+                <th scope="col">Commentaire</th>
+                <th scope="col">Lien</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for idee in idees %}
+                <tr>
+                    <th>{{ idee.id }}</th>
+                    <td>{{ idee.libelle[:30] }} {% if idee.libelle|length > 30 %} [...]{% endif %}</td>
+                    <td>{{ idee.commentaire[:30] }} {% if idee.commentaire|length > 30 %} [...]{% endif %}</td>
+                    <td><a target="_blank" href="{{ idee.url }}">{{ idee.url[:30] }} {% if idee.url|length > 30 %} [...]{% endif %}</a></td>
+                    <td>
+                        <a href="{{ path('idee_update', {'id': idee.id}) }}"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt"></i></button></a>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteIdee"><i class="fas fa-trash-alt"></i></button>
+                        <!-- Modal -->
+                        {{  include('include/modal.html.twig', {'id_modal' : 'deleteIdee','title' : 'Supprimer cette idée', 'route' : path('idee_delete', {'id': idee.id})}) }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ path('idee_new') }}"><button type="button" class="btn btn-primary">Ajouter une idée</button></a>
+
+        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#deleteAllIdees">Supprimer toutes mes idées</button>
+
+        <!-- Modal -->
+        {{  include('include/modal.html.twig', {'id_modal' : 'deleteAllIdees','title' : 'Supprimer toutes vos idées', 'route' : path('user_idees_delete')}) }}
+        {% endif %}
+    </div>
+{% endblock %}
