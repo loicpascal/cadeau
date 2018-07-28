@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Ajout d'un commentaire{% endblock %}
+
+{% block body %}
+    <h1>Ajout d'un commentaire</h1>
+    <div>
+        {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.content) }}
+            {{ form_errors(form.content) }}
+            {{ form_widget(form.content, {'attr' : {'class' : 'form-control'}}) }}
+        </div>
+
+        <div>
+            {{ form_widget(form.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

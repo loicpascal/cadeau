@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} {{ idee.libelle }}{% endblock %}
+
+{% block body %}
+
+<h1>{{ idee.libelle }}</h1>
+{% if idee.userAdding %}<p>Ajoutée par {{ idee.userAdding.fullname }}</p>{% endif %}
+
+<div>
+    <h2>Commentaire</h2>
+    {% if idee.commentaire %}
+    <p>{{ idee.commentaire }}</p>
+    {% else %}
+    Aucun commentaire
+    {% endif %}
+
+    <h2>Lien</h2>
+    {% if idee.url %}
+    <p><a target="_blank" href="{{ idee.url }}">{{ idee.url }}</a></p>
+    {% else %}
+    Aucun lien.
+    {% endif %}
+
+    <hr>
+    <h2>Commentaires des autres</h2>
+    {% if idee.comments|length %}
+    {% for comment in idee.comments %}
+        <p>
+            <b>{{ comment.user.firstname }}</b> - Le {{ comment.date|date("d/m/Y à H:i") }}
+            {% if app.user.id == comment.user.id %}<a href="{{ path('comment_delete', {'id' : comment.id}) }}" class="badge badge-danger">Supprimer</a>{% endif %}
+        </p>
+        <p>{{ comment.content }}</p>
+    {% endfor %}
+    {% else %}
+    Aucun commentaire
+    {% endif %}
+
+    <h3>Déposer un commentaire</h3>
+    {{ form_start(formComment) }}
+    <div class="form-group">
+        {{ form_label(formComment.content) }}
+        {{ form_errors(formComment.content) }}
+        {{ form_widget(formComment.content, {'attr' : {'class' : 'form-control'}}) }}
+    </div>
+
+    <div>
+        {{ form_widget(formComment.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+    </div>
+    {{ form_end(formComment) }}
+</div>
+{% endblock %}
+

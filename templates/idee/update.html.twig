@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} {{ idee.libelle }}{% endblock %}
+
+{% block body %}
+
+    <div>
+        <h1>{{ idee.libelle }}</h1>
+        {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.libelle) }}
+            {{ form_errors(form.libelle) }}
+            {{ form_widget(form.libelle, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom'}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.commentaire) }}
+            {{ form_errors(form.commentaire) }}
+            {{ form_widget(form.commentaire, {'attr' : {'class' : 'form-control'}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.url) }}
+            {{ form_errors(form.url) }}
+            <div class="input-group mb-3">
+                {{ form_widget(form.url, {'attr' : {'class' : 'form-control', 'placeholder' : 'Lien vers une page d\'exemple'}}) }}
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2"><a target="_blank" href="{{ idee.url }}">Voir</a></span>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            {{ form_widget(form.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

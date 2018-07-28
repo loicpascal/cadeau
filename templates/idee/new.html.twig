@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Nouvelle idée{% endblock %}
+
+{% block body %}
+
+    <div>
+        <h1>Nouvelle idée {% if user is not null %}pour {{ user.fullname }}{% endif %}</h1>
+        {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.libelle) }}
+            {{ form_errors(form.libelle) }}
+            {{ form_widget(form.libelle, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom'}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.commentaire) }}
+            {{ form_errors(form.commentaire) }}
+            {{ form_widget(form.commentaire, {'attr' : {'class' : 'form-control'}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.url) }}
+            {{ form_errors(form.url) }}
+            {{ form_widget(form.url, {'attr' : {'class' : 'form-control', 'placeholder' : 'Lien vers une page d\'exemple'}}) }}
+        </div>
+
+        <div>
+            {{ form_widget(form.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
