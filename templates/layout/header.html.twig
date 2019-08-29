@@ -5,39 +5,48 @@
     {% set actif = 'mesIdees' %}
 {% elseif cur_path in ['user_list', 'user_show', 'idee_show'] %}
     {% set actif = 'lesAutres' %}
+{% elseif cur_path in ['user_shopping_list'] %}
+    {% set actif = 'mesAchats' %}
 {% endif %}
-
 
 <header>
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="{{ path('idee_list') }}">Idées Cadeaux</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav mr-auto">
-                {# Si l'utilisateur est connecté #}
-                {% if app.user %}
-                <li class="nav-item dropdown {% if actif == 'mesIdees' %}active{% endif %}">
-                    <a class="nav-link" href="{{ path('idee_list') }}">Mes idées</a>
-                </li>
-                <li class="nav-item dropdown {% if actif == 'lesAutres' %}active{% endif %}">
-                    <a class="nav-link" href="{{ path('user_list') }}">Les autres</a>
-                </li>
-                {% endif %}
-            </ul>
+        <div class="container">
+            <img id="logo" src="{{ asset('image/logo.png') }}" alt="">
+            <a class="navbar-brand innerContainer" href="{{ path('idee_list') }}">Ma lettre au Père Noël</a>
             {% if app.user %}
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarMonCompte" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Connecté en tant que {{ app.user.firstname }} {{ app.user.lastname }}</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarMonCompte">
-                        <a class="dropdown-item" href="{{ path('user_update', {'id': app.user.id}) }}">Mon compte</a>
-                        <a class="dropdown-item" href="{{ path('logout') }}">Déconnexion</a>
-                    </div>
-                </li>
-            </ul>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             {% endif %}
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav ml-auto">
+                    {# Si l'utilisateur est connecté #}
+                    {% if app.user %}
+                    <li class="nav-item dropdown {% if actif == 'mesIdees' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('idee_list') }}">Mes idées</a>
+                    </li>
+                    <li class="nav-item dropdown {% if actif == 'lesAutres' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('user_list') }}">Les autres</a>
+                    </li>
+                    <li class="nav-item dropdown {% if actif == 'mesAchats' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('user_shopping_list') }}">Mes achats</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                {% if app.user %}
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarMonCompte" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ app.user.firstname }}</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarMonCompte">
+                            <a class="dropdown-item" href="{{ path('user_update', {'id': app.user.id}) }}">Mon compte</a>
+                            <a class="dropdown-item" href="{{ path('logout') }}">Déconnexion</a>
+                        </div>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
         </div>
     </nav>
 </header>

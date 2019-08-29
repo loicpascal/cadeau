@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Ma liste de cadeaux{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Bienvenue</h1>
+        <p>Cette application web est là pour vous permettre d'avoir des cadeaux utiles et sympas pour les fêtes de Noël qui approchent à grands pas !</p>
+        <p>Trois choses importantes à savoir :</p>
+        <ol>
+            <li>Vous pouvez donner des idées de cadeaux <b>pour vous-même</b></li>
+            <li>Vous pouvez donner des idées de cadeaux <b>pour les autres</b></li>
+            <li>Les idées que les autres ajoutent à votre liste, vous ne les voyez pas !</li>
+        </ol>
+        <p>Le suspense reste donc entier quant à ce Noël 2018…</p>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <h2>J'ai déjà un compte</h2>
+                {% if error %}
+                <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                <form action="{{ path('login') }}" method="post">
+                    <div class="form-group">
+                        <label for="username">Identifiant</label>
+                        <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" class="form-control" id="password" name="_password" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Se connecter !</button>
+                </form>
+            </div>
+            <div class="col">
+                <h2>Je n'ai pas de compte</h2>
+                <br>
+                <a href="{{ path('createAccount') }}" class="btn btn-success btn-lg btn-block">Je me crée un compte !</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -6,13 +6,13 @@
 
 
 <div class="container">
-    <h1>Votre compte</h1>
+    <h1>Mon compte</h1>
     {% for message in app.flashes('danger') %}
     <div class="alert alert-danger">{{ message }}</div>
     {% endfor %}
     <div class="row">
         <div class="col">
-            <h2>Vos informations</h2>
+            <h2>Mes informations</h2>
             {% for message in app.flashes('successInfosUpdate') %}
                 <div class="alert alert-success">{{ message }}</div>
             {% endfor %}
@@ -50,7 +50,7 @@
             <div>
                 {{ form_widget(formInfos.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
                 {% if user.idees|length %}
-                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#deleteAllIdees">Supprimer mes idées <span class="badge badge-light">{{ user.idees|length }}</span></button>
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#deleteAllIdees">Supprimer mes idées</button>
                 {{  include('include/modal.html.twig', {'id_modal' : 'deleteAllIdees','title' : 'Supprimer toutes vos idées', 'route' : path('user_idees_delete')}) }}
                 {% endif %}
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteUser">Supprimer mon compte</button>
@@ -60,7 +60,7 @@
         </div>
 
         <div class="col">
-            <h2>Votre mot de passe</h2>
+            <h2>Mon mot de passe</h2>
             {% for message in app.flashes('successPwdUpdate') %}
                 <div class="alert alert-success">{{ message }}</div>
             {% endfor %}

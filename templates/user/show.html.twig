@@ -4,51 +4,75 @@
 
 {% block body %}
 
-    <h1>{{ user.fullname }}</h1>
-    <div>
-        <table class="table">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nom</th>
-                <th scope="col">Commentaire</th>
-                <th scope="col">Lien</th>
-                <th scope="col">&nbsp;</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for idee in idees %}
-                <tr>
-                    <th>{{ idee.id }}</th>
-                    <td><a href="{{ path('idee_show', {'id' : idee.id}) }}">{{ idee.libelle[:30] }} {% if idee.libelle|length > 30 %} [...]{% endif %}</a></td>
-                    <td>{{ idee.commentaire[:30] }} {% if idee.commentaire|length > 30 %} [...]{% endif %}</td>
-                    <td><a target="_blank" href="{{ idee.url }}" title="{{ idee.url }}">{{ idee.url[:30] }} {% if idee.url|length > 30 %} [...]{% endif %}</a></td>
-                    <td>
+    <h1>{{ user.firstname }}</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    <div class="listeCadeau">
+        {% for idee in idees %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <img class="cadeau" src="{{ asset('image/cadeau.png') }}" alt=""><a href="{{ path('idee_show', {'id' : idee.id}) }}">{{ idee.libelle }}</a>
+                        <h6 class="card-subtitle mb-2 text-muted">{% if idee.userAdding %}Ajouté par {{ idee.userAdding.firstname }}{% endif %}</h6>
+                    </h5>
+                    <p class="card-text">{{ idee.commentaire|nl2br }}</p>
+                    <p><a target="_blank" href="{{ idee.url }}" title="{{ idee.url }}" class="card-link">{{ idee.url[:30] }} {% if idee.url|length > 30 %} [...]{% endif %}</a></p>
+
+                    <p class="card-text">
                         {% if idee.state == 0 %}
-                        <a href="{{ path('idee_state_update_to_take', {'id': idee.id, 'user_id': idee.user.id}) }}"><button type="button" class="btn btn-primary btn-sm">Je prends</button></a>
+                            <a href="{{ path('idee_state_update_to_take', {'id': idee.id, 'user_id': idee.user.id}) }}"><button type="button" class="btn btn-primary btn-sm">Je prends</button></a>
                         {% elseif idee.state == 1 %} {# J'ai pris #}
                             {% if idee.usertaking.id == app.user.id %}
-                            <a href="{{ path('idee_state_update_taken', {'id': idee.id, 'user_id': idee.user.id}) }}"><button type="button" class="btn btn-success btn-sm">J'ai pris</button></a>
-                            <a href="{{ path('idee_state_cancel_to_take', {'id': idee.id, 'user_id': idee.user.id}) }}"><button type="button" class="btn btn-warning btn-sm">Je ne prends plus</button></a>
+                                <a href="{{ path('idee_state_update_taken', {'id': idee.id, 'user_id': idee.user.id}) }}"><button type="button" class="btn btn-success btn-sm">J'ai pris</button></a>
+                                <a href="{{ path('idee_state_cancel_to_take', {'id': idee.id, 'user_id': idee.user.id}) }}"><button type="button" class="btn btn-warning btn-sm">Je ne prends plus</button></a>
                             {% else %}
-                            <span class="text-success">En cours par quelqu'un d'autre</span>
+                                <span class="text-success">En cours par quelqu'un d'autre</span>
                             {% endif %}
                         {% elseif idee.state == 2 %}
-                            <div class="alert alert-success" role="alert">Pris ! <a href="{{ path('idee_state_cancel_to_take', {'id': idee.id, 'user_id': idee.user.id}) }}" class="badge badge-danger">Annuler</a></div>
+                            <div class="alert alert-success" role="alert">Pris {% if idee.usertaking.id != app.user.id %} par quelqu'un d'autre{% else %} par vous{% endif %} !
                             {% if idee.usertaking.id == app.user.id %}
+                                <a href="{{ path('idee_state_cancel_to_take', {'id': idee.id, 'user_id': idee.user.id}) }}" class="badge badge-danger">Annuler</a>
                             {% endif %}
+                            </div>
                         {% endif %}
+
+                        <a href="{{ path('idee_show', {'id' : idee.id}) }}">
+                            <button type="button" class="btn btn-info btn-sm" title="{% transchoice idee.comments|length %}{0} Commenter|{1} Commentaire|]1,Inf[ Commentaires{% endtranschoice %}">
+                                <i class="fas fa-comments"></i>&nbsp;{% transchoice idee.comments|length %}{0}|{1} Commentaire|]1,Inf[ Commentaires{% endtranschoice %}
+                                {% if idee.comments|length %}
+                                    &nbsp;<span class="badge badge-light">{{ idee.comments|length }}</span>
+                                {% endif %}
+                            </button>
+                        </a>
+
                         {% if (idee.userAdding.id is defined) and (idee.userAdding.id == app.user.id) %}
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteIdee" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
-                        <!-- Modal -->
-                        {{  include('include/modal.html.twig', {'id_modal' : 'deleteIdee','title' : 'Supprimer cette idée', 'route' : path('idee_delete', {'id': idee.id})}) }}
+                            <a href="{{ path('idee_update', {'id': idee.id}) }}" title="Modifier"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt"></i></button></a>
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteIdee{{ idee.id }}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
+                            <!-- Modal -->
+                            {{  include('include/modal.html.twig', {'id_modal' : 'deleteIdee' ~ idee.id,'title' : 'Supprimer cette idée', 'route' : path('idee_delete', {'id': idee.id})}) }}
                         {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <a href="{{ path('idee_new', {'id_user': user.id}) }}" class="btn btn-primary">Ajouter une idée</a>
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+    <a href="{{ path('idee_new', {'id_user': user.id}) }}" class="btn btn-primary">Ajouter une idée</a>
+
+    <br><br>
+    <div class="card">
+        <div class="card-header">Aide</div>
+        <div class="card-body">
+            <ul>
+                <li>Cliquez sur une idée pour voir sa description. <b>Vous pourrez y ajouter des commentaires !</b></li>
+                <li>Cliquez sur <button type="button" class="btn btn-primary btn-sm">Je prends</button> pour indiquer que vous comptez prendre le cadeau.</li>
+                <li>Cliquez sur <button type="button" class="btn btn-success btn-sm">J'ai pris</button> pour indiquer que vous avez pris le cadeau.</li>
+                <li>Cliquez sur <button type="button" class="btn btn-warning btn-sm">Je ne prends plus</button> pour indiquer que vous ne prenez plus le cadeau.</li>
+                <li><span class="text-success">"En cours par quelqu'un d'autre"</span> indique que quelqu'un d'autre s'occupe de ce cadeau.</li>
+            </ul>
+        </div>
     </div>
 {% endblock %}
 

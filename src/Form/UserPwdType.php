@@ -23,7 +23,7 @@ class UserPwdType extends AbstractType
         $builder
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Mot de passe'),
+                'first_options'  => array('label' => 'Nouveau mot de passe'),
                 'second_options' => array('label' => 'Confirmation de mot de passe'),
             ))
             ->add('save', SubmitType::class, ['label' => 'Changer mon mot de passe']);

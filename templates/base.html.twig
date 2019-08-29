@@ -2,8 +2,9 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>{% block title %}Noël | {% endblock %}</title>
+        <link rel="icon" type="image/png" href="{{ asset('image/logo.png') }}" />
         {% block stylesheets %}
             <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
             <link href="{{ asset('css/main.css') }}" rel="stylesheet">
@@ -15,11 +16,39 @@
 
         <!-- Begin page content -->
         <main role="main" class="container">
+            <div id="countdown" class="text-center">
+                <div class="col-lg-2 compterebourDiv">
+                    <span id="countdown_day" class="compterebour">--</span><br><span class="compterebourLibelle">jours</span>
+                </div>
+                <div class="col-lg-2 compterebourDiv">
+                    <span id="countdown_hour" class="compterebour">--</span><br><span class="compterebourLibelle">heures</span>
+                </div>
+                <div class="col-lg-2 compterebourDiv">
+                    <span id="countdown_min" class="compterebour">--</span><br><span class="compterebourLibelle">minutes</span>
+                </div>
+                <div class="col-lg-2 compterebourDiv">
+                    <span id="countdown_sec" class="compterebour">--</span><br><span class="compterebourLibelle">secondes</span>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-12">
+                    {% if breadcrumb is defined %}
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            {% for key, item in breadcrumb %}
+                                {% if key %}
+                                    <li class="breadcrumb-item"><a href="{{ key }}">{{ item }}</a></li>
+                                {% else %}
+                                    <li class="breadcrumb-item active" aria-current="page">{{ item }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ol>
+                    </nav>
+                    {% endif %}
                     {% block body %}{% endblock %}
                 </div>
             </div>
+            <img class="cadeaux" src="{{ asset('image/cadeaux.png') }}" alt="">
         </main>
 
         {{ include('layout/footer.html.twig') }}
@@ -27,6 +56,7 @@
             <script src="{{ asset('js/jquery.min.js') }}"></script>
             <script src="{{ asset('bootstrap/js/popper.min.js') }}"></script>
             <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('js/countdown.js') }}"></script>
         {% endblock %}
     </body>
 </html>

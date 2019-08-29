@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} Liste des users{% endblock %}
+{% block title %}{{ parent() }} Liste des membres{% endblock %}
 
 {% block body %}
 <h1>Liste des membres</h1>
@@ -14,21 +14,17 @@
     <table class="table table-hover">
         <thead class="thead-dark">
             <tr>
-                <th scope="col">#</th>
                 <th scope="col">Nom</th>
-                <th scope="col">Identifiant</th>
-                <th scope="col">Action</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for user in users %}
             <tr>
-                <th>{{ user.id }}</th>
-                <td>{{ user.fullname }}</td>
-                <td>{{ user.username }}</td>
+                <td title="{{ user.fullname }}">{{ user.firstname }}</td>
                 <td>
-                    <a href="{{ path('idee_new', {'id_user': user.id}) }}" class="btn btn-primary btn-sm" title="Ajouter une idée"><i class="fas fa-plus"></i></a>
-                    <a href="{{ path('user_show', {'id': user.id}) }}" class="btn btn-primary btn-sm" title="Voir ses idées"><i class="fas fa-list-ul"></i>&nbsp;&nbsp;<span class="badge badge-light">{{ user.idees|length }}</span></a>
+                    <a href="{{ path('idee_new', {'id_user': user.id}) }}" class="btn btn-primary btn-sm" title="Ajouter une idée"><i class="fas fa-plus"></i>&nbsp;Ajouter une idée</a>
+                    <a href="{{ path('user_show', {'id': user.id}) }}" class="btn btn-primary btn-sm" title="Voir ses idées"><i class="fas fa-list-ul"></i>&nbsp;Voir la liste d'idées&nbsp;&nbsp;<span class="badge badge-light">{{ user.idees|length }}</span></a>
                     {% if is_granted('ROLE_ADMIN') %}
                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteUser{{ user.id }}" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
                     <!-- Modal -->
@@ -40,4 +36,13 @@
         </tbody>
     </table>
 </div>
+
+    <br>
+    <div class="card">
+        <div class="card-header">Aide</div>
+        <div class="card-body">
+            <p>Un membre ne peut pas voir les idées de cadeaux que vous ajoutez à sa liste.</p>
+            <p>Le petit chiffre sur fond blanc dans <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-list-ul"></i>&nbsp;Voir la liste d'idées&nbsp;&nbsp;<span class="badge badge-light">6</span></button> indique le nombre d'idées du membre.</p>
+        </div>
+    </div>
 {% endblock %}

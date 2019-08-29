@@ -33,7 +33,10 @@ class CommentController extends Controller
             $em->persist($comment);
             $em->flush();
 
-            return $this->redirectToRoute('idee_show', ['id' => $id_idee]);
+            return $this->redirectToRoute(
+                ($this->getUser()-> getId() == $idee->getUser()->getId()) ? 'idee_update' : 'idee_show',
+                ['id' => $id_idee]
+            );
         }
         return $this->render('comment/new.html.twig', [
             'form' => $form->createView()
@@ -51,6 +54,9 @@ class CommentController extends Controller
         $em->remove($comment);
         $em->flush();
 
-        return $this->redirectToRoute('idee_show', ['id' => $id_idee]);
+        return $this->redirectToRoute(
+            ($this->getUser()-> getId() == $comment->getIdee()->getUser()->getId()) ? 'idee_update' : 'idee_show',
+            ['id' => $id_idee]
+        );
     }
 }

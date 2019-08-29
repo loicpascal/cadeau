@@ -32,6 +32,18 @@ class UserController extends Controller
     }
 
     /**
+     * @Route("/user/shopping-list", name="user_shopping_list")
+     */
+    public function shoppingListAction()
+    {
+        $idees = $this->getDoctrine()->getRepository(Idee::class)->findAllByUserTaking($this->getUser()->getId());
+
+        return $this->render('user/shoppingList.html.twig', [
+            'idees' => $idees
+        ]);
+    }
+
+    /**
      * @Route("/user/{id}", name="user_show", requirements={"id"="\d+"})
      */
     public function showAction(User $user, UserAccessService $userAccessService)
@@ -51,6 +63,7 @@ class UserController extends Controller
 
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'breadcrumb' => [$this->generateUrl('user_list') => "Les autres", "" => $user->getFirstname()],
             'idees' => $idees
         ]);
     }

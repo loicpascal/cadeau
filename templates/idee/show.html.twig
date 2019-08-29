@@ -8,46 +8,50 @@
 {% if idee.userAdding %}<p>Ajoutée par {{ idee.userAdding.fullname }}</p>{% endif %}
 
 <div>
-    <h2>Commentaire</h2>
+    <h3>Description</h3>
     {% if idee.commentaire %}
-    <p>{{ idee.commentaire }}</p>
+    <p>{{ idee.commentaire|nl2br }}</p>
     {% else %}
-    Aucun commentaire
+    Aucune description
     {% endif %}
 
-    <h2>Lien</h2>
+    <h3>Lien</h3>
     {% if idee.url %}
     <p><a target="_blank" href="{{ idee.url }}">{{ idee.url }}</a></p>
     {% else %}
     Aucun lien.
     {% endif %}
 
-    <hr>
-    <h2>Commentaires des autres</h2>
-    {% if idee.comments|length %}
-    {% for comment in idee.comments %}
-        <p>
-            <b>{{ comment.user.firstname }}</b> - Le {{ comment.date|date("d/m/Y à H:i") }}
-            {% if app.user.id == comment.user.id %}<a href="{{ path('comment_delete', {'id' : comment.id}) }}" class="badge badge-danger">Supprimer</a>{% endif %}
-        </p>
-        <p>{{ comment.content }}</p>
-    {% endfor %}
-    {% else %}
-    Aucun commentaire
-    {% endif %}
+    <div class="jumbotron">
+        {% if idee.comments|length %}
+        <h3>Commentaires</h3>
+        <div class="list-group">
+        {% for comment in idee.comments %}
+            <div class="list-group-item list-group-item-action flex-column align-items-start">
+                <p>
+                    <b>{{ comment.user.firstname }}</b> - Le {{ comment.date|date("d/m/Y à H:i") }}
+                    {% if app.user.id == comment.user.id %}<a href="{{ path('comment_delete', {'id' : comment.id}) }}" class="badge badge-danger">Supprimer</a>{% endif %}
+                </p>
+                <p>{{ comment.content|nl2br }}</p>
+            </div>
+        {% endfor %}
+        </div>
+            <br>
+        {% endif %}
 
-    <h3>Déposer un commentaire</h3>
-    {{ form_start(formComment) }}
-    <div class="form-group">
-        {{ form_label(formComment.content) }}
-        {{ form_errors(formComment.content) }}
-        {{ form_widget(formComment.content, {'attr' : {'class' : 'form-control'}}) }}
-    </div>
+        <h4>Déposer un commentaire</h4>
+        {{ form_start(formComment) }}
+        <div class="form-group">
+            {{ form_label(formComment.content) }}
+            {{ form_errors(formComment.content) }}
+            {{ form_widget(formComment.content, {'attr' : {'class' : 'form-control'}}) }}
+        </div>
 
-    <div>
-        {{ form_widget(formComment.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+        <div>
+            {{ form_widget(formComment.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+        </div>
+        {{ form_end(formComment) }}
     </div>
-    {{ form_end(formComment) }}
 </div>
 {% endblock %}
 

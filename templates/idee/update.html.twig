@@ -34,5 +34,36 @@
             {{ form_widget(form.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
         </div>
         {{ form_end(form) }}
+
+        {% if idee.comments|length %}
+        <div class="jumbotron">
+            <h3>Commentaires</h3>
+            <div class="list-group">
+                {% for comment in idee.comments %}
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <p>
+                            <b>{{ comment.user.firstname }}</b> - Le {{ comment.date|date("d/m/Y à H:i") }}
+                            {% if app.user.id == comment.user.id %}<a href="{{ path('comment_delete', {'id' : comment.id}) }}" class="badge badge-danger">Supprimer</a>{% endif %}
+                        </p>
+                        <p>{{ comment.content|nl2br }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <br>
+
+            <h4>Répondre {% transchoice idee.comments|length %}{1} au commentaire|]1,Inf[ aux commentaires{% endtranschoice %}</h4>
+            {{ form_start(formComment) }}
+            <div class="form-group">
+                {{ form_label(formComment.content) }}
+                {{ form_errors(formComment.content) }}
+                {{ form_widget(formComment.content, {'attr' : {'class' : 'form-control'}}) }}
+            </div>
+
+            <div>
+                {{ form_widget(formComment.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+            </div>
+            {{ form_end(formComment) }}
+        </div>
+        {% endif %}
     </div>
 {% endblock %}

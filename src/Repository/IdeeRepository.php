@@ -19,6 +19,18 @@ class IdeeRepository extends ServiceEntityRepository
         parent::__construct($registry, Idee::class);
     }
 
+    public function findAllByUserTaking($user_id)
+    {
+        return $this->createQueryBuilder('i')
+            ->innerJoin('i.user', 'u')
+            ->where('i.user_taking = :user_taking')
+            ->setParameter('user_taking', $user_id)
+            ->orderBy('u.firstname')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 //    /**
 //     * @return Idee[] Returns an array of Idee objects
 //     */
