@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Mes groupes{% endblock %}
+
+{% block body %}
+
+    <h1>Mes groupes</h1>
+
+    <a href="{{ path('team_new') }}"><button type="button" class="btn btn-primary">Créer un groupe</button></a>
+    <a href="{{ path('team_rejoin') }}"><button type="button" class="btn btn-primary">Rejoindre un groupe</button></a>
+    <br><br>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    <div>
+        {% if not teams %}
+            <div class="alert alert-warning">
+                Vous ne faites parti d'aucun groupe.<br>
+                <a href="{{ path('team_new') }}"><button type="button" class="btn btn-primary">Créer un groupe</button></a>
+                <a href="{{ path('team_rejoin') }}"><button type="button" class="btn btn-primary">Rejoindre un groupe</button></a>
+            </div>
+        {%  else %}
+
+            <div class="listeCadeau">
+                {% for team in teams %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ team.name }} ({{ team.code }})
+                                <h6 class="card-subtitle mb-2 text-muted">Chef de clan : {{ (team.leader == app.user) ? 'vous' : team.leader.firstname }}</h6>
+                            </h5>
+                            <p class="card-text">
+                                {% if app.session.get('team') is null or (app.session.get('team') is not null and app.session.get('team').id != team.id) %}
+                                    <a href="{{ path('team_connect', {'id': team.id}) }}" title="Se connecter"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-users"></i>&nbsp;Se connecter</button></a>
+                                {% endif %}
+
+                                {% if team.leader == app.user %}
+                                    <a href="{{ path('team_update', {'id': team.id}) }}" title="Modifier"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt"></i>&nbsp;Modifier</button></a>
+
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteTeam{{ team.id }}" title="Supprimer"><i class="fas fa-trash-alt"></i>&nbsp;Supprimer</button>
+                                    <!-- Modal -->
+                                    {{  include('include/modal.html.twig', {'id_modal' : 'deleteTeam' ~ team.id,'title' : 'Supprimer ce groupe', 'route' : path('team_delete', {'id': team.id})}) }}
+                                {% else %}
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#leaveTeam{{ team.id }}" title="Quitter"><i class="fas fa-sign-out-alt"></i>&nbsp;Quitter</button>
+                                    <!-- Modal -->
+                                    {{  include('include/modal.html.twig', {'id_modal' : 'leaveTeam' ~ team.id,'title' : 'Quitter ce groupe', 'route' : path('team_leave', {'id': team.id})}) }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -4,13 +4,20 @@
 
 {% block body %}
 
-    <h1>Mes idées</h1>
+    <h1>Mes idées{% if archived is defined %} archivées{% endif %}</h1>
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">{{ message }}</div>
     {% endfor %}
     <div>
         {% if not idees %}
-        <div class="alert alert-warning">Vous n'avez aucune idée de cadeau. <a href="{{ path('idee_new') }}" class="alert-link">J'ajoute une idée !</a></div>
+            {% if archived is defined %}
+            <div class="alert alert-warning">Vous n'avez aucune idée archivée.</div>
+            {% else %}
+            <div class="alert alert-warning">
+                Vous n'avez aucune idée de cadeau.<br>
+                <a href="{{ path('idee_new') }}"><button type="button" class="btn btn-primary">Ajouter une idée</button></a>
+            </div>
+            {% endif %}
         {%  else %}
 
         <div class="listeCadeau">
@@ -32,6 +39,11 @@
                         </a>
                         {% endif %}
 
+                        {% if idee.archived %}
+                            <a href="{{ path('idee_unarchive', {'id': idee.id}) }}" title="Désarchiver"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-archive"></i>&nbsp;Désarchiver</button></a>
+                        {%  else %}
+                            <a href="{{ path('idee_archive', {'id': idee.id}) }}" title="Archiver"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-archive"></i>&nbsp;Archiver</button></a>
+                        {% endif %}
                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteIdee{{ idee.id }}" title="Supprimer"><i class="fas fa-trash-alt"></i>&nbsp;Supprimer</button>
                         <!-- Modal -->
                         {{  include('include/modal.html.twig', {'id_modal' : 'deleteIdee' ~ idee.id,'title' : 'Supprimer cette idée', 'route' : path('idee_delete', {'id': idee.id})}) }}

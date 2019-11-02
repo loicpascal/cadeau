@@ -16,20 +16,23 @@
 
         <!-- Begin page content -->
         <main role="main" class="container">
-            <div id="countdown" class="text-center">
-                <div class="col-lg-2 compterebourDiv">
-                    <span id="countdown_day" class="compterebour">--</span><br><span class="compterebourLibelle">jours</span>
+            {% if app.request.get('_route') in ['login'] %}
+                <div id="countdown" class="text-center">
+                    <div class="col-lg-2 compterebourDiv">
+                        <span id="countdown_day" class="compterebour">--</span><br><span class="compterebourLibelle">jours</span>
+                    </div>
+                    <div class="col-lg-2 compterebourDiv">
+                        <span id="countdown_hour" class="compterebour">--</span><br><span class="compterebourLibelle">heures</span>
+                    </div>
+                    <div class="col-lg-2 compterebourDiv">
+                        <span id="countdown_min" class="compterebour">--</span><br><span class="compterebourLibelle">minutes</span>
+                    </div>
+                    <div class="col-lg-2 compterebourDiv">
+                        <span id="countdown_sec" class="compterebour">--</span><br><span class="compterebourLibelle">secondes</span>
+                    </div>
                 </div>
-                <div class="col-lg-2 compterebourDiv">
-                    <span id="countdown_hour" class="compterebour">--</span><br><span class="compterebourLibelle">heures</span>
-                </div>
-                <div class="col-lg-2 compterebourDiv">
-                    <span id="countdown_min" class="compterebour">--</span><br><span class="compterebourLibelle">minutes</span>
-                </div>
-                <div class="col-lg-2 compterebourDiv">
-                    <span id="countdown_sec" class="compterebour">--</span><br><span class="compterebourLibelle">secondes</span>
-                </div>
-            </div>
+            {% endif %}
+
             <div class="row">
                 <div class="col-12">
                     {% if breadcrumb is defined %}

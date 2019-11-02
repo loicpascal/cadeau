@@ -62,9 +62,20 @@ class Idee
      */
     private $user_adding;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $archived;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Team", inversedBy="idees")
+     */
+    private $team;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->team = new ArrayCollection();
     }
 
     public function getId()
@@ -183,6 +194,44 @@ class Idee
     public function setUserAdding(?User $user_adding): self
     {
         $this->user_adding = $user_adding;
+
+        return $this;
+    }
+
+    public function getArchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): self
+    {
+        $this->archived = $archived;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Team[]
+     */
+    public function getTeams(): Collection
+    {
+        return $this->team;
+    }
+
+    public function addTeam(Team $team): self
+    {
+        if (!$this->team->contains($team)) {
+            $this->team[] = $team;
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): self
+    {
+        if ($this->team->contains($team)) {
+            $this->team->removeElement($team);
+        }
 
         return $this;
     }

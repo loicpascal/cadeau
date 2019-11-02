@@ -86,6 +86,11 @@ class User implements UserInterface, \Serializable
      */
     private $idees_adding;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Team", inversedBy="users")
+     */
+    private $teams;
+
     public function __construct()
     {
         $this->isActive = true;
@@ -93,6 +98,7 @@ class User implements UserInterface, \Serializable
         $this->idees_taken = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->idees_adding = new ArrayCollection();
+        $this->teams = new ArrayCollection();
     }
 
     public function getId()
@@ -368,6 +374,32 @@ class User implements UserInterface, \Serializable
             if ($ideesAdding->getUserAdding() === $this) {
                 $ideesAdding->setUserAdding(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Team[]
+     */
+    public function getTeam(): Collection
+    {
+        return $this->teams;
+    }
+
+    public function addTeam(Team $team): self
+    {
+        if (!$this->teams->contains($team)) {
+            $this->teams[] = $team;
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): self
+    {
+        if ($this->teams->contains($team)) {
+            $this->teams->removeElement($team);
         }
 
         return $this;

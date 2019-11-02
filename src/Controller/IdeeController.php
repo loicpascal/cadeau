@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Idee;
+use App\Entity\Team;
 use App\Form\CommentType;
 use App\Form\IdeeType;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,21 +20,62 @@ class IdeeController extends Controller
     /**
      * @Route("/", name="idee_list")
      */
-    public function listAction()
+    public function listAction(SessionInterface $session)
     {
         $em = $this->getDoctrine()->getManager();
 
+        // On récupère la liste des teams du membre
+        $teams = $this->getDoctrine()
+            ->getRepository(Team::class)
+            ->findAllMyTeams($this->getUser()->getID());
+
+        if (!$session->has('team')) {
+            // Si on a pas de team en session
+            if (count($teams) === 1) {
+                // Si on a qu'une team
+                $session->set('team', $teams[0]);
+            } elseif (count($teams) === 0 || count($teams) > 1) {
+                // Si pas de team associée OU plusieurs teams
+                return $this->redirectToRoute('team_list');
+            }
+        }
+
+        // On récupère les idées du membre
         $idees = $this->getDoctrine()
             ->getRepository(Idee::class)
-            ->findBy(
+            ->findAllByTeam(
                 [
                     'user' => $this->getUser(),
-                    'user_adding' => null
+                    'user_adding' => null,
+                    'archived' => false,
+                    'team_id' => $em->merge($session->get('team'))->getID()
                 ]
             );
 
         return $this->render('idee/list.html.twig', [
             'idees' => $idees,
+        ]);
+    }
+
+    /**
+     * @Route("/idee/archived", name="idee_archived_list")
+     */
+    public function listArchivedAction()
+    {
+        $idees = $this->getDoctrine()
+            ->getRepository(Idee::class)
+            ->findBy(
+                [
+                    'user' => $this->getUser(),
+                    'user_adding' => null,
+                    'archived' => true
+                ],
+		['id' => 'DESC']
+            );
+
+        return $this->render('idee/list.html.twig', [
+            'idees' => $idees,
+            'archived' => true,
         ]);
     }
 
@@ -70,7 +114,7 @@ class IdeeController extends Controller
     /**
      * @Route("/idee/new/{id_user}", name="idee_new")
      */
-    public function newAction(Request $request, $id_user = null) {
+    public function newAction(SessionInterface $session, Request $request, $id_user = null) {
         $em = $this->getDoctrine()->getManager();
         $idee = new Idee();
 
@@ -87,6 +131,7 @@ class IdeeController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $idee = $form->getData();
+            $team = $em->merge($session->get('team'));
 
             // Ajoute une idée pour un autre
             if (!is_null($id_user)) {
@@ -94,7 +139,9 @@ class IdeeController extends Controller
             }
 
             $idee->setState(0);
+            $idee->setArchived(0);
             $idee->setUser($user);
+            $idee->addTeam($team);
             $em->persist($idee);
             $em->flush();
 
@@ -158,6 +205,42 @@ class IdeeController extends Controller
             'breadcrumb' => [$this->generateUrl('idee_list') => "Mes idées", "" => $idee->getLibelle()],
             'idee' => $idee
         ]);
+    }
+
+    /**
+     * @Route("/idee/{id}/archive", name="idee_archive", requirements={"id"="\d+"})
+     */
+    public function archiveAction($id) {
+        $em = $this->getDoctrine()->getManager();
+        $idee = $em->getRepository(Idee::class)->find($id);
+
+        if (!$idee) {
+            throw $this->createNotFoundException('Aucune idée trouvée pour l\'identifiant : ' . $id);
+        }
+
+        $idee->setArchived(true);
+        $em->persist($idee);
+        $em->flush();
+
+        return $this->redirectToRoute('idee_archived_list');
+    }
+
+    /**
+     * @Route("/idee/{id}/unarchive", name="idee_unarchive", requirements={"id"="\d+"})
+     */
+    public function unarchiveAction($id) {
+        $em = $this->getDoctrine()->getManager();
+        $idee = $em->getRepository(Idee::class)->find($id);
+
+        if (!$idee) {
+            throw $this->createNotFoundException('Aucune idée trouvée pour l\'identifiant : ' . $id);
+        }
+
+        $idee->setArchived(false);
+        $em->persist($idee);
+        $em->flush();
+
+        return $this->redirectToRoute('idee_list');
     }
 
     /**
@@ -225,7 +308,7 @@ class IdeeController extends Controller
         $idee = $entityManager->getRepository(Idee::class)->find($id);
 
         if (!$idee) {
-            throw $this->createNotFoundException('Aucun user trouvé pour l\'identifiant : ' . $id);
+            throw $this->createNotFoundException('Aucune idée trouvé pour l\'identifiant : ' . $id);
         }
         if (!$this->checkAccessDelete($idee)) {
             return $this->redirectToRoute('idee_list');

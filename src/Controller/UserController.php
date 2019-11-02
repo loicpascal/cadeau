@@ -58,7 +58,8 @@ class UserController extends Controller
         $idees = $this->getDoctrine()
             ->getRepository(Idee::class)
             ->findBy(
-                ['user' => $user]
+                ['user' => $user],
+		['id' => 'DESC']
             );
 
         return $this->render('user/show.html.twig', [

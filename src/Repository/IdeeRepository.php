@@ -31,32 +31,21 @@ class IdeeRepository extends ServiceEntityRepository
             ;
     }
 
-//    /**
-//     * @return Idee[] Returns an array of Idee objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function findAllByTeam($params)
     {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('i')
+            ->innerJoin('i.team', 't')
+            ->where('i.user = :user')
+            ->andWhere('i.user_adding = :user_adding')
+            ->andWhere('i.archived = :archived')
+            ->andWhere('team_id = :team_id')
+            ->setParameter('user', $params['user'])
+            ->setParameter('user_adding', $params['user_adding'])
+            ->setParameter('archived', $params['archived'])
+            ->setParameter('team_id', $params['team_id']);
 
-    /*
-    public function findOneBySomeField($value): ?Idee
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $query = $qb->getQuery();
+
+        return $query->getResult();
     }
-    */
 }

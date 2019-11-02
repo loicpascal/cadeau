@@ -7,6 +7,8 @@
     {% set actif = 'lesAutres' %}
 {% elseif cur_path in ['user_shopping_list'] %}
     {% set actif = 'mesAchats' %}
+{% elseif cur_path in ['team_list', 'team_new', 'team_update'] %}
+    {% set actif = 'mesGroupes' %}
 {% endif %}
 
 <header>
@@ -14,24 +16,36 @@
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container">
             <img id="logo" src="{{ asset('image/logo.png') }}" alt="">
-            <a class="navbar-brand innerContainer" href="{{ path('idee_list') }}">Ma lettre au Père Noël</a>
+            <a class="navbar-brand innerContainer" href="{{ path('idee_list') }}">
+                Ma lettre au Père Noël
+                {% if app.user %}
+                    {% if app.session.get('team') is not null %}
+                        - {{ app.session.get('team').name }}
+                    {% endif %}
+                {% endif %}
+            </a>
+
             {% if app.user %}
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             {% endif %}
+
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav ml-auto">
                     {# Si l'utilisateur est connecté #}
                     {% if app.user %}
                     <li class="nav-item dropdown {% if actif == 'mesIdees' %}active{% endif %}">
-                        <a class="nav-link" href="{{ path('idee_list') }}">Mes idées</a>
+                        <a class="nav-link" href="{{ path('idee_list') }}"><i class="fas fa-gift"></i>&nbsp;Mes idées</a>
                     </li>
                     <li class="nav-item dropdown {% if actif == 'lesAutres' %}active{% endif %}">
-                        <a class="nav-link" href="{{ path('user_list') }}">Les autres</a>
+                        <a class="nav-link" href="{{ path('user_list') }}"><i class="fas fa-user-friends"></i>&nbsp;Membres</a>
                     </li>
                     <li class="nav-item dropdown {% if actif == 'mesAchats' %}active{% endif %}">
-                        <a class="nav-link" href="{{ path('user_shopping_list') }}">Mes achats</a>
+                        <a class="nav-link" href="{{ path('user_shopping_list') }}"><i class="fas fa-shopping-cart"></i>&nbsp;Mes achats</a>
+                    </li>
+                    <li class="nav-item dropdown {% if actif == 'mesGroupes' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('team_list') }}"><i class="fas fa-users"></i>&nbsp;Groupes</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -40,8 +54,9 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="navbarMonCompte" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ app.user.firstname }}</a>
                         <div class="dropdown-menu" aria-labelledby="navbarMonCompte">
-                            <a class="dropdown-item" href="{{ path('user_update', {'id': app.user.id}) }}">Mon compte</a>
-                            <a class="dropdown-item" href="{{ path('logout') }}">Déconnexion</a>
+                            <a class="dropdown-item" href="{{ path('user_update', {'id': app.user.id}) }}"><i class="fas fa-user"></i>&nbsp;Mon compte</a>
+                            <a class="dropdown-item" href="{{ path('idee_archived_list') }}"><i class="fas fa-archive"></i>&nbsp;Idées archivées</a>
+                            <a class="dropdown-item" href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i>&nbsp;Déconnexion</a>
                         </div>
                     </li>
                 </ul>

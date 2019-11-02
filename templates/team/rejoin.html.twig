@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Rejoindre un groupe{% endblock %}
+
+{% block body %}
+
+    <div>
+        <h1>Rejoindre un groupe</h1>
+        {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.code) }}
+            {{ form_errors(form.code) }}
+            {{ form_widget(form.code, {'attr' : {'class' : 'form-control', 'placeholder' : 'Code'}}) }}
+        </div>
+
+        <div>
+            {{ form_widget(form.rejoin, {'attr' : {'class' : 'btn btn-primary'}}) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
