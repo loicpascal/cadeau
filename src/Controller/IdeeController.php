@@ -27,7 +27,8 @@ class IdeeController extends Controller
                 [
                     'user' => $this->getUser(),
                     'user_adding' => null
-                ]
+                ],
+		['id' => 'DESC']
             );
 
         return $this->render('idee/list.html.twig', [
