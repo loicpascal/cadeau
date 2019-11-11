@@ -18,9 +18,9 @@ class IdeeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('libelle', TextType::class)
-            ->add('commentaire', TextareaType::class, array('required' => false))
-            ->add('url', UrlType::class, array('required' => false));
+            ->add('libelle', TextType::class, ['label' => 'Libellé'])
+            ->add('commentaire', TextareaType::class, ['required' => false])
+            ->add('url', UrlType::class, ['required' => false]);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
             $idee = $event->getData();

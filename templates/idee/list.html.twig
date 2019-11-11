@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} Ma liste{% endblock %}
+{% block title %}{{ parent() }} Mes idées{% endblock %}
 
 {% block body %}
 
-    <h1>Mes idées{% if archived is defined %} archivées{% endif %}</h1>
+    <h1>Mes idées{% if archived is defined %} archivées{% endif %} <span class="badge badge-primary">{{ idees|length }}</span></h1>
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">{{ message }}</div>
     {% endfor %}

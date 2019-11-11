@@ -286,7 +286,7 @@ class IdeeController extends Controller
         $idee = $entityManager->getRepository(Idee::class)->find($id);
 
         if (!$idee) {
-            throw $this->createNotFoundException('Aucun user trouvé pour l\'identifiant : ' . $id);
+            throw $this->createNotFoundException('Aucune idée trouvé pour l\'identifiant : ' . $id);
         }
         if (!$this->checkAccessDelete($idee)) {
             return $this->redirectToRoute('idee_list');
