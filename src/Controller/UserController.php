@@ -36,7 +36,7 @@ class UserController extends Controller
      */
     public function shoppingListAction()
     {
-        $idees = $this->getDoctrine()->getRepository(Idee::class)->findAllByUserTaking($this->getUser()->getId());
+        $idees = $this->getDoctrine()->getRepository(Idee::class)->findAllByUserTaking($this->getUser()->getId(), 0);
 
         return $this->render('user/shoppingList.html.twig', [
             'idees' => $idees
@@ -58,8 +58,11 @@ class UserController extends Controller
         $idees = $this->getDoctrine()
             ->getRepository(Idee::class)
             ->findBy(
-                ['user' => $user],
-		['id' => 'DESC']
+                [
+		            'user' => $user,
+                    'archived' => false
+        		],
+        		['id' => 'DESC']
             );
 
         return $this->render('user/show.html.twig', [

@@ -19,12 +19,14 @@ class IdeeRepository extends ServiceEntityRepository
         parent::__construct($registry, Idee::class);
     }
 
-    public function findAllByUserTaking($user_id)
+    public function findAllByUserTaking($user_id, $archived = 0)
     {
         return $this->createQueryBuilder('i')
             ->innerJoin('i.user', 'u')
             ->where('i.user_taking = :user_taking')
+            ->andWhere('i.archived = :archived')
             ->setParameter('user_taking', $user_id)
+            ->setParameter('archived', $archived)
             ->orderBy('u.firstname')
             ->getQuery()
             ->getResult()

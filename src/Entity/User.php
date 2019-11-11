@@ -66,6 +66,8 @@ class User implements UserInterface, \Serializable
      */
     private $idees;
 
+    private $ideesNotArchived;
+
     /**
      * @ORM\Column(type="string", length=60)
      */
@@ -90,6 +92,7 @@ class User implements UserInterface, \Serializable
     {
         $this->isActive = true;
         $this->idees = new ArrayCollection();
+        $this->ideesNotArchived = new ArrayCollection();
         $this->idees_taken = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->idees_adding = new ArrayCollection();
@@ -255,6 +258,39 @@ class User implements UserInterface, \Serializable
     public function getIdees(): Collection
     {
         return $this->idees;
+    }
+
+    /**
+     * @return Collection|Idee[]
+     */
+    public function getIdeesNotArchived(): Collection
+    {
+        $this->ideesNotArchived = new ArrayCollection();
+        foreach ($this->idees as $idee) {
+            if (!$idee->getArchived()) {
+                $this->addIdeeNotArchived($idee);
+            }
+        }
+        return $this->ideesNotArchived;
+    }
+
+    public function addIdeeNotArchived(Idee $idee): self
+    {
+        if (!$this->ideesNotArchived->contains($idee)) {
+            $this->ideesNotArchived[] = $idee;
+            $idee->setUser($this);
+        }
+
+        return $this;
+    }
+    
+    public function removeIdeeNotArchived(Idee $idee): self
+    {
+        if ($this->ideesNotArchived->contains($idee)) {
+            $this->ideesNotArchived->removeElement($idee);
+        }
+
+        return $this;
     }
 
     public function addIdee(Idee $idee): self

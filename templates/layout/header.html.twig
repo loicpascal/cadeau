@@ -16,10 +16,11 @@
             <img id="logo" src="{{ asset('image/logo.png') }}" alt="">
             <a class="navbar-brand innerContainer" href="{{ path('idee_list') }}">Ma lettre au Père Noël</a>
             {% if app.user %}
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             {% endif %}
+
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav ml-auto">
                     {# Si l'utilisateur est connecté #}

@@ -62,6 +62,11 @@ class Idee
      */
     private $user_adding;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default": false})
+     */
+    private $archived;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -183,6 +188,18 @@ class Idee
     public function setUserAdding(?User $user_adding): self
     {
         $this->user_adding = $user_adding;
+
+        return $this;
+    }
+
+    public function getArchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): self
+    {
+        $this->archived = $archived;
 
         return $this;
     }

@@ -26,13 +26,36 @@ class IdeeController extends Controller
             ->findBy(
                 [
                     'user' => $this->getUser(),
-                    'user_adding' => null
+                    'user_adding' => null,
+                    'archived' => false
                 ],
 		['id' => 'DESC']
             );
 
         return $this->render('idee/list.html.twig', [
             'idees' => $idees,
+        ]);
+    }
+
+    /**
+     * @Route("/idee/archived", name="idee_archived_list")
+     */
+    public function listArchivedAction()
+    {
+        $idees = $this->getDoctrine()
+            ->getRepository(Idee::class)
+            ->findBy(
+                [
+                    'user' => $this->getUser(),
+                    'user_adding' => null,
+                    'archived' => true
+                ],
+		['id' => 'DESC']
+            );
+
+        return $this->render('idee/list.html.twig', [
+            'idees' => $idees,
+            'archived' => true,
         ]);
     }
 
@@ -95,6 +118,7 @@ class IdeeController extends Controller
             }
 
             $idee->setState(0);
+            $idee->setArchived(0);
             $idee->setUser($user);
             $em->persist($idee);
             $em->flush();
@@ -159,6 +183,42 @@ class IdeeController extends Controller
             'breadcrumb' => [$this->generateUrl('idee_list') => "Mes idées", "" => $idee->getLibelle()],
             'idee' => $idee
         ]);
+    }
+
+    /**
+     * @Route("/idee/{id}/archive", name="idee_archive", requirements={"id"="\d+"})
+     */
+    public function archiveAction($id) {
+        $em = $this->getDoctrine()->getManager();
+        $idee = $em->getRepository(Idee::class)->find($id);
+
+        if (!$idee) {
+            throw $this->createNotFoundException('Aucune idée trouvée pour l\'identifiant : ' . $id);
+        }
+
+        $idee->setArchived(true);
+        $em->persist($idee);
+        $em->flush();
+
+        return $this->redirectToRoute('idee_archived_list');
+    }
+
+    /**
+     * @Route("/idee/{id}/unarchive", name="idee_unarchive", requirements={"id"="\d+"})
+     */
+    public function unarchiveAction($id) {
+        $em = $this->getDoctrine()->getManager();
+        $idee = $em->getRepository(Idee::class)->find($id);
+
+        if (!$idee) {
+            throw $this->createNotFoundException('Aucune idée trouvée pour l\'identifiant : ' . $id);
+        }
+
+        $idee->setArchived(false);
+        $em->persist($idee);
+        $em->flush();
+
+        return $this->redirectToRoute('idee_list');
     }
 
     /**
