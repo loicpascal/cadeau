@@ -4,52 +4,62 @@
 
 {% block body %}
     <div class="container">
+    
+        <div class="row">
+            <div class="col">
 
-        <div class="alert alert-secondary" role="alert">
-            <h1 class="alert-heading">Bienvenue !</h1>
-            <p>Cette application web est là pour vous permettre d'avoir des cadeaux utiles et sympas pour les fêtes de Noël qui approchent à grands pas !</p>
-            <p>Trois choses importantes à savoir :</p>
-            <ol>
-                <li>Vous pouvez donner des idées de cadeaux <b>pour vous-même</b></li>
-                <li>Vous pouvez donner des idées de cadeaux <b>pour les autres</b></li>
-                <li>Les idées que les autres ajoutent à votre liste, vous ne les voyez pas !</li>
-            </ol>
-        </div>
+                <div class="alert alert-secondary" role="alert">
+                    <h1 class="alert-heading">Bienvenue !</h1>
+                    <p>Cette application web est là pour vous permettre d'avoir des cadeaux utiles et sympas pour les fêtes de Noël qui approchent à grands pas !</p>
+                    <p>Trois choses importantes à savoir :</p>
+                    <ol>
+                        <li>Vous pouvez donner des idées de cadeaux <b>pour vous-même</b></li>
+                        <li>Vous pouvez donner des idées de cadeaux <b>pour les autres</b></li>
+                        <li>Les idées que les autres ajoutent à votre liste, vous ne les voyez pas !</li>
+                    </ol>
+                </div>
+                
+                <div class="alert alert-success" role="alert">
+                    <h2 class="alert-heading">Du nouveau !</h2>
+                    <p></p>
 
-        <div class="alert alert-success" role="alert">
-            <h2 class="alert-heading">Du nouveau pour bientôt !</h2>
-            <p></p>
-
-            <div class="card-deck">
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-header">Très bientôt !</div>
-                    <div class="card-body">
-                        <h5 class="card-title">Groupes</h5>
-                        <p class="card-text">Plusieurs groupes distincts de personnes pourront s'inscrire.</p>
+                    <div class="card-deck">
+                        <div class="card text-white bg-success mb-1">
+                            <div class="card-header">Nouveau !</div>
+                            <div class="card-body">
+                                <h5 class="card-title">Archives</h5>
+                                <p class="card-text">Archivez vos idées passées pour ne pas les oublier.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-header">Très bientôt !</div>
-                    <div class="card-body">
-                        <h5 class="card-title">Archives</h5>
-                        <p class="card-text">Archivez vos idées passées pour ne pas les oublier.</p>
-                    </div>
-                </div>
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-header">Bientôt !</div>
-                    <div class="card-body">
-                        <h5 class="card-title">Notifications</h5>
-                        <p class="card-text">Choisissez de recevoir un mail lorsqu'un membre ajoute une idée.</p>
+
+                <div class="alert alert-success" role="alert">
+                    <h2 class="alert-heading">Pour bientôt !</h2>
+                    <p></p>
+
+                    <div class="card-deck">
+                        <div class="card text-white bg-success mb-1">
+                            <div class="card-header">Bientôt !</div>
+                            <div class="card-body">
+                                <h5 class="card-title">Groupes</h5>
+                                <p class="card-text">Plusieurs groupes distincts de personnes pourront s'inscrire.</p>
+                            </div>
+                        </div>
+                        <div class="card text-white bg-success mb-1">
+                            <div class="card-header">Très ientôt !</div>
+                            <div class="card-body">
+                                <h5 class="card-title">Notifications</h5>
+                                <p class="card-text">Choisissez de recevoir un mail lorsqu'un membre ajoute une idée.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
 
             <div class="col">
-                <div class="card border-success">
-                    <div class="card-header">J'ai déjà un compte</div>
+                <div class="card">
+                    <div class="card-header">Connexion</div>
                     <div class="card-body text-secondary">
                         {% if error %}
                             <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -65,17 +75,9 @@
                                 <input type="password" class="form-control" id="password" name="_password" />
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-lg btn-block">Se connecter !</button>
+                            <button type="submit" class="btn btn-success btn-lg btn-block">Je me connecte !</button>
+                            <a href="{{ path('createAccount') }}" class="btn btn-link btn-lg btn-block">Je me crée un compte !</a>
                         </form>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card border-success">
-                    <div class="card-header">Je n'ai pas de compte</div>
-                    <div class="card-body text-secondary">
-                        <a href="{{ path('createAccount') }}" class="btn btn-success btn-lg btn-block">Je me crée un compte !</a>
                     </div>
                 </div>
             </div>
