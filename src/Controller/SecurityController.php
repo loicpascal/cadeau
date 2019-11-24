@@ -15,6 +15,10 @@ class SecurityController extends Controller
      */
     public function login(AuthenticationUtils $authenticationUtils)
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('user_list');
+        }
+
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Idee;
+use App\Entity\Param;
 use App\Form\CommentType;
 use App\Form\IdeeType;
 use App\Entity\User;
@@ -19,8 +20,6 @@ class IdeeController extends Controller
      */
     public function listAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
         $idees = $this->getDoctrine()
             ->getRepository(Idee::class)
             ->findBy(
@@ -29,7 +28,7 @@ class IdeeController extends Controller
                     'user_adding' => null,
                     'archived' => false
                 ],
-		['id' => 'DESC']
+		        ['id' => 'DESC']
             );
 
         return $this->render('idee/list.html.twig', [
@@ -50,7 +49,7 @@ class IdeeController extends Controller
                     'user_adding' => null,
                     'archived' => true
                 ],
-		['id' => 'DESC']
+                ['id' => 'DESC']
             );
 
         return $this->render('idee/list.html.twig', [
@@ -94,8 +93,10 @@ class IdeeController extends Controller
     /**
      * @Route("/idee/new/{id_user}", name="idee_new")
      */
-    public function newAction(Request $request, $id_user = null) {
+    public function newAction(Request $request, $id_user = null)
+    {
         $em = $this->getDoctrine()->getManager();
+        $param = $em->getRepository(Param::class)->find(1);
         $idee = new Idee();
 
         if (is_null($id_user)) {
@@ -120,6 +121,7 @@ class IdeeController extends Controller
             $idee->setState(0);
             $idee->setArchived(0);
             $idee->setUser($user);
+            $idee->setAnnee($param->getAnnee());
             $em->persist($idee);
             $em->flush();
 
