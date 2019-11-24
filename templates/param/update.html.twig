@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Paramétrage {% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1>Paramétrage de l'application</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+    <div class="form-group">
+        {{ form_label(form.annee) }}
+        {{ form_errors(form.annee) }}
+        {{ form_widget(form.annee, {'attr' : {'class' : 'form-control', 'placeholder' : 'Année'}}) }}
+    </div>
+    <div>
+        {{ form_widget(form.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+    </div>
+    {{ form_end(form) }}
+
+</div>
+{% endblock %}

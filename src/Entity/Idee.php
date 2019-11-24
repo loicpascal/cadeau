@@ -67,6 +67,11 @@ class Idee
      */
     private $archived;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $annee;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -200,6 +205,18 @@ class Idee
     public function setArchived(bool $archived): self
     {
         $this->archived = $archived;
+
+        return $this;
+    }
+
+    public function getAnnee(): ?int
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(int $annee): self
+    {
+        $this->annee = $annee;
 
         return $this;
     }

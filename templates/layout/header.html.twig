@@ -43,6 +43,9 @@
                         <div class="dropdown-menu" aria-labelledby="navbarMonCompte">
                             <a class="dropdown-item" href="{{ path('user_update', {'id': app.user.id}) }}"><i class="fas fa-user"></i>&nbsp;Mon compte</a>
                             <a class="dropdown-item" href="{{ path('idee_archived_list') }}"><i class="fas fa-archive"></i>&nbsp;Idées archivées</a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <a class="dropdown-item" href="{{ path('param') }}"><i class="fas fa-cog"></i>&nbsp;Paramétrage</a>
+                            {% endif %}
                             <a class="dropdown-item" href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i>&nbsp;Déconnexion</a>
                         </div>
                     </li>
