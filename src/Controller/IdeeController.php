@@ -19,8 +19,6 @@ class IdeeController extends Controller
      */
     public function listAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
         $idees = $this->getDoctrine()
             ->getRepository(Idee::class)
             ->findBy(
@@ -29,7 +27,7 @@ class IdeeController extends Controller
                     'user_adding' => null,
                     'archived' => false
                 ],
-		['id' => 'DESC']
+                ['id' => 'DESC']
             );
 
         return $this->render('idee/list.html.twig', [

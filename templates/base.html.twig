@@ -33,6 +33,10 @@
                 </div>
             {% endif %}
 
+            {% if not app.request.cookies.get('hideAlert') %}
+                {{ include('include/modalAlert.html.twig') }}
+            {% endif %}
+
             <div class="row">
                 <div class="col-12">
                     {% if breadcrumb is defined %}
@@ -60,6 +64,19 @@
             <script src="{{ asset('bootstrap/js/popper.min.js') }}"></script>
             <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
             <script src="{{ asset('js/countdown.js') }}"></script>
+            {% if not app.request.cookies.get('hideAlert') %}
+            <script>
+                modalAlert = $('#modalAlert');
+                modalAlert.modal('show');
+
+                modalAlert.on('hidden.bs.modal', function (e) {
+                    var date = new Date();
+                    date.setDate(date.getDate() + 7);
+                    document.cookie = "hideAlert=true;expires=" + date.toUTCString();
+                    console.log(date.toUTCString());
+                })
+            </script>
+            {% endif %}
         {% endblock %}
     </body>
 </html>
