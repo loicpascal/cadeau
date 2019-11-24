@@ -121,7 +121,7 @@ class IdeeController extends Controller
             $em->persist($idee);
             $em->flush();
 
-            $this->sendEmailInsert($idee);
+            $this->sendEmailInsert($idee, $request);
 
             $this->addFlash('success', 'L\'idée a bien été ajoutée à votre liste');
 
@@ -322,7 +322,7 @@ class IdeeController extends Controller
             (!is_null($idee->getUserAdding()) && $idee->getUserAdding()->getId() == $this->getUser()->getId());
     }
 
-    private function sendEmailInsert(Idee $idee) {
+    private function sendEmailInsert(Idee $idee, $request) {
         if ($idee->getUser()->getId() == 1) {
             return;
         }
@@ -331,6 +331,8 @@ class IdeeController extends Controller
         } else {
             $body = $idee->getUser()->getFirstname() . " a ajouté l'idée " . $idee->getLibelle() . " dans votre application web !";
         }
+        $link = $request->getScheme() . '://' . $request->getHttpHost() . $this->generateUrl('idee_show', ['id' => $idee->getId()]);
+        $body .= '<p><a href="' . $link . '">Voir</a></p>';
         $message = (new \Swift_Message('Ajout d\'une idée cadeau'))
             ->setFrom('nepasrepondre@loic-pascal.fr')
             ->setTo('loic.pascal@gmail.com')
