@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} Liste des membres{% endblock %}
+{% block title %}{{ parent() }} Membres{% endblock %}
 
 {% block body %}
-<h1>Liste des membres</h1>
+<h1>Membres</h1>
 {% for message in app.flashes('success') %}
     <div class="alert alert-success">{{ message }}</div>
 {% endfor %}

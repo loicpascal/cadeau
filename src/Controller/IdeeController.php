@@ -81,7 +81,7 @@ class IdeeController extends Controller
         return $this->render('idee/show.html.twig', [
             'idee' => $idee,
             'breadcrumb' => [
-                $this->generateUrl('user_list') => "Les autres",
+                $this->generateUrl('user_list') => "Membres",
                 $this->generateUrl('user_show', ['id' => $user->getId()]) => $user->getFirstname(),
                 "" => $idee->getLibelle()
             ],
@@ -101,7 +101,7 @@ class IdeeController extends Controller
             $breadcrumb = [$this->generateUrl('idee_list') => "Mes idées", "" => "Nouvelle idée"];
         } else {
             $user = $this->getDoctrine()->getRepository(User::class)->find($id_user);
-            $breadcrumb = [$this->generateUrl('user_list') => "Les autres", "" => "Nouvelle idée pour " . $user->getFirstname()];
+            $breadcrumb = [$this->generateUrl('user_list') => "Membres", "" => "Nouvelle idée pour " . $user->getFirstname()];
         }
 
         $form = $this->createForm(IdeeType::class, $idee);

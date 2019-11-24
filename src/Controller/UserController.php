@@ -67,7 +67,7 @@ class UserController extends Controller
 
         return $this->render('user/show.html.twig', [
             'user' => $user,
-            'breadcrumb' => [$this->generateUrl('user_list') => "Les autres", "" => $user->getFirstname()],
+            'breadcrumb' => [$this->generateUrl('user_list') => "Membres", "" => $user->getFirstname()],
             'idees' => $idees
         ]);
     }
