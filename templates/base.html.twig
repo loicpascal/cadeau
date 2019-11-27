@@ -73,6 +73,7 @@
             <script src="{{ asset('bootstrap/js/popper.min.js') }}"></script>
             <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
             <script src="{{ asset('js/countdown.js') }}"></script>
+            <script src="{{ asset('js/mlpn.js') }}"></script>
             {% if not app.request.cookies.get('hideAlert') %}
             <script>
                 modalAlert = $('#modalAlert');
@@ -86,6 +87,11 @@
                 })
             </script>
             {% endif %}
+            <script>
+                $(document).ready(function() {
+                    mlpn.init();
+                });
+            </script>
         {% endblock %}
     </body>
 </html>
