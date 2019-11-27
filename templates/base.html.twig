@@ -74,19 +74,15 @@
             <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
             <script src="{{ asset('js/countdown.js') }}"></script>
             <script src="{{ asset('js/mlpn.js') }}"></script>
+
             {% if not app.request.cookies.get('hideAlert') %}
             <script>
-                modalAlert = $('#modalAlert');
-                modalAlert.modal('show');
-
-                modalAlert.on('hidden.bs.modal', function (e) {
-                    var date = new Date();
-                    date.setDate(date.getDate() + 7);
-                    document.cookie = "hideAlert=true;expires=" + date.toUTCString();
-                    console.log(date.toUTCString());
-                })
+                $(document).ready(function() {
+                    mlpn.initBootstrapModalAlert();
+                });
             </script>
             {% endif %}
+
             <script>
                 $(document).ready(function() {
                     mlpn.init();
