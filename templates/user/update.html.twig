@@ -47,8 +47,18 @@
                 {{ form_widget(formInfos.username, {'attr' : {'class' : 'form-control', 'placeholder' : 'Identifiant'}}) }}
             </div>
 
+            <h2>Mes notifications</h2>
+            <div class="form-group form-check">
+                {{ form_errors(formInfos.receiveEmailNewComment) }}
+                {{ form_widget(formInfos.receiveEmailNewComment, {'attr' : {'class' : 'form-check-input'}}) }}
+                {{ form_label(formInfos.receiveEmailNewComment) }}
+            </div>
+
             <div>
                 {{ form_widget(formInfos.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+
+                <br><br>
+                <h2>Zone à risque</h2>
                 {% if user.idees|length %}
                 <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#deleteAllIdees">Supprimer mes idées</button>
                 {{  include('include/modal.html.twig', {'id_modal' : 'deleteAllIdees','title' : 'Supprimer toutes vos idées', 'route' : path('user_idees_delete')}) }}

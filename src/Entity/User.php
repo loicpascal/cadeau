@@ -88,6 +88,11 @@ class User implements UserInterface, \Serializable
      */
     private $idees_adding;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $receiveEmailNewComment = false;
+
     public function __construct()
     {
         $this->isActive = true;
@@ -405,6 +410,18 @@ class User implements UserInterface, \Serializable
                 $ideesAdding->setUserAdding(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getReceiveEmailNewComment(): ?bool
+    {
+        return $this->receiveEmailNewComment;
+    }
+
+    public function setReceiveEmailNewComment(bool $receiveEmailNewComment): self
+    {
+        $this->receiveEmailNewComment = $receiveEmailNewComment;
 
         return $this;
     }

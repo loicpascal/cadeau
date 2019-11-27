@@ -327,6 +327,8 @@ class IdeeController extends Controller
     }
 
     private function sendEmailInsert(Idee $idee, $request) {
+
+        // Je ne veux pas recevoir de mail pour moi
         if ($idee->getUser()->getId() == 1) {
             return;
         }
