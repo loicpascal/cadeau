@@ -4,96 +4,132 @@
 
 {% block body %}
 
+{% if panel is not defined %}
+    {% set panel = 'infos' %}
+{% endif %}
 
 <div class="container">
+
     <h1>Mon compte</h1>
     {% for message in app.flashes('danger') %}
-    <div class="alert alert-danger">{{ message }}</div>
+        <div class="alert alert-danger">{{ message }}</div>
     {% endfor %}
+
     <div class="row">
-        <div class="col">
-            <h2>Mes informations</h2>
-            {% for message in app.flashes('successInfosUpdate') %}
-                <div class="alert alert-success">{{ message }}</div>
-            {% endfor %}
-            {{ form_start(formInfos) }}
-            <div class="form-group">
-                {{ form_label(formInfos.lastname) }}
-                {{ form_errors(formInfos.lastname) }}
-                {{ form_widget(formInfos.lastname, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom'}}) }}
+        <div class="col-3">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link {% if panel == 'infos' %}active{% endif %}" id="v-pills-infos-tab" data-toggle="pill" href="#v-pills-infos" role="tab" aria-controls="v-pills-infos" aria-selected="true">Mes informations</a>
+                <a class="nav-link {% if panel == 'notifs' %}active{% endif %}" id="v-pills-notifs-tab" data-toggle="pill" href="#v-pills-notifs" role="tab" aria-controls="v-pills-notifs" aria-selected="false">Mes notifications</a>
+                <a class="nav-link {% if panel == 'password' %}active{% endif %}" id="v-pills-password-tab" data-toggle="pill" href="#v-pills-password" role="tab" aria-controls="v-pills-password" aria-selected="false">Mon mot de passe</a>
+                <a class="nav-link" id="v-pills-risk-tab" data-toggle="pill" href="#v-pills-risk" role="tab" aria-controls="v-pills-risk" aria-selected="false">Zone à risque</a>
             </div>
-
-            <div class="form-group">
-                {{ form_label(formInfos.firstname) }}
-                {{ form_errors(formInfos.firstname) }}
-                {{ form_widget(formInfos.firstname, {'attr' : {'class' : 'form-control', 'placeholder' : 'Prénom'}}) }}
-            </div>
-
-            <div class="form-group">
-                {{ form_label(formInfos.email) }}
-                {{ form_errors(formInfos.email) }}
-                {{ form_widget(formInfos.email, {'attr' : {'class' : 'form-control', 'placeholder' : 'Prénom'}}) }}
-            </div>
-
-            <div class="form-group">
-                {{ form_label(formInfos.birthdate) }}
-                {{ form_errors(formInfos.birthdate) }}
-                {{ form_widget(formInfos.birthdate, {'attr' : {'class' : 'form-control'}}) }}
-            </div>
-
-            <div class="form-group">
-                {{ form_label(formInfos.username) }}
-                {{ form_errors(formInfos.username) }}
-                {{ form_widget(formInfos.username, {'attr' : {'class' : 'form-control', 'placeholder' : 'Identifiant'}}) }}
-            </div>
-
-            <h2>Mes notifications</h2>
-            <div class="form-group form-check">
-                {{ form_errors(formInfos.receiveEmailNewComment) }}
-                {{ form_widget(formInfos.receiveEmailNewComment, {'attr' : {'class' : 'form-check-input'}}) }}
-                {{ form_label(formInfos.receiveEmailNewComment) }}
-            </div>
-
-            <div>
-                {{ form_widget(formInfos.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
-
-                <br><br>
-                <h2>Zone à risque</h2>
-                {% if user.idees|length %}
-                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#deleteAllIdees">Supprimer mes idées</button>
-                {{  include('include/modal.html.twig', {'id_modal' : 'deleteAllIdees','title' : 'Supprimer toutes vos idées', 'route' : path('user_idees_delete')}) }}
-                {% endif %}
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteUser">Supprimer mon compte</button>
-                {{ include('include/modal.html.twig', {'id_modal' : 'deleteUser','title' : 'Supprimer votre compte', 'route' : path('user_delete') }) }}
-            </div>
-            {{ form_end(formInfos) }}
         </div>
+        <div class="col-9">
+            <div class="tab-content" id="v-pills-tabContent">
 
-        <div class="col">
-            <h2>Mon mot de passe</h2>
-            {% for message in app.flashes('successPwdUpdate') %}
-                <div class="alert alert-success">{{ message }}</div>
-            {% endfor %}
-            {% for message in app.flashes('dangerPwdUpdate') %}
-                <div class="alert alert-danger">{{ message }}</div>
-            {% endfor %}
-            {{ form_start(formPwd) }}
-            <div class="form-group">
-                {{ form_label(formPwd.plainPassword.first) }}
-                {{ form_errors(formPwd.plainPassword.first) }}
-                {{ form_widget(formPwd.plainPassword.first, {'attr' : {'class' : 'form-control'}}) }}
-            </div>
+                {# Mes informations #}
+                <div class="tab-pane {% if panel == 'infos' %}show active{% endif %}" id="v-pills-infos" role="tabpanel" aria-labelledby="v-pills-infos-tab">
+                    <h2>Mes informations</h2>
+                    {% for message in app.flashes('successInfosUpdate') %}
+                        <div class="alert alert-success">{{ message }}</div>
+                    {% endfor %}
+                    {{ form_start(formInfos) }}
+                    <div class="form-group">
+                        {{ form_label(formInfos.lastname) }}
+                        {{ form_errors(formInfos.lastname) }}
+                        {{ form_widget(formInfos.lastname, {'attr' : {'class' : 'form-control', 'placeholder' : 'Nom'}}) }}
+                    </div>
 
-            <div class="form-group">
-                {{ form_label(formPwd.plainPassword.second) }}
-                {{ form_errors(formPwd.plainPassword.second) }}
-                {{ form_widget(formPwd.plainPassword.second, {'attr' : {'class' : 'form-control'}}) }}
-            </div>
+                    <div class="form-group">
+                        {{ form_label(formInfos.firstname) }}
+                        {{ form_errors(formInfos.firstname) }}
+                        {{ form_widget(formInfos.firstname, {'attr' : {'class' : 'form-control', 'placeholder' : 'Prénom'}}) }}
+                    </div>
 
-            <div>
-                {{ form_widget(formPwd.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+                    <div class="form-group">
+                        {{ form_label(formInfos.email) }}
+                        {{ form_errors(formInfos.email) }}
+                        {{ form_widget(formInfos.email, {'attr' : {'class' : 'form-control', 'placeholder' : 'Prénom'}}) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(formInfos.birthdate) }}
+                        {{ form_errors(formInfos.birthdate) }}
+                        {{ form_widget(formInfos.birthdate, {'attr' : {'class' : 'form-control'}}) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(formInfos.username) }}
+                        {{ form_errors(formInfos.username) }}
+                        {{ form_widget(formInfos.username, {'attr' : {'class' : 'form-control', 'placeholder' : 'Identifiant'}}) }}
+                    </div>
+
+                    <div>
+                        {{ form_widget(formInfos.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+                    </div>
+                    {{ form_end(formInfos) }}
+                </div>
+
+                {# Mes notifications #}
+                <div class="tab-pane {% if panel == 'notifs' %}show active{% endif %}" id="v-pills-notifs" role="tabpanel" aria-labelledby="v-pills-notifs-tab">
+                    <h2>Mes notifications</h2>
+                    {% for message in app.flashes('successNotifsUpdate') %}
+                        <div class="alert alert-success">{{ message }}</div>
+                    {% endfor %}
+                    {{ form_start(formNotifications) }}
+                    <div class="form-group form-check">
+                        {{ form_errors(formNotifications.receiveEmailNewComment) }}
+                        {{ form_widget(formNotifications.receiveEmailNewComment, {'attr' : {'class' : 'form-check-input'}}) }}
+                        {{ form_label(formNotifications.receiveEmailNewComment) }}
+                    </div>
+
+                    <div>
+                        {{ form_widget(formNotifications.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+                    </div>
+                    {{ form_end(formNotifications) }}
+                </div>
+
+                {# Mon mot de passe #}
+                <div class="tab-pane {% if panel == 'password' %}show active{% endif %}" id="v-pills-password" role="tabpanel" aria-labelledby="v-pills-password-tab">
+                    <h2>Mon mot de passe</h2>
+                    {% for message in app.flashes('successPwdUpdate') %}
+                        <div class="alert alert-success">{{ message }}</div>
+                    {% endfor %}
+                    {% for message in app.flashes('dangerPwdUpdate') %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                    {% endfor %}
+                    {{ form_start(formPwd) }}
+                    <div class="form-group">
+                        {{ form_label(formPwd.plainPassword.first) }}
+                        {{ form_errors(formPwd.plainPassword.first) }}
+                        {{ form_widget(formPwd.plainPassword.first, {'attr' : {'class' : 'form-control'}}) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(formPwd.plainPassword.second) }}
+                        {{ form_errors(formPwd.plainPassword.second) }}
+                        {{ form_widget(formPwd.plainPassword.second, {'attr' : {'class' : 'form-control'}}) }}
+                    </div>
+
+                    <div>
+                        {{ form_widget(formPwd.save, {'attr' : {'class' : 'btn btn-primary'}}) }}
+                    </div>
+                    {{ form_end(formPwd) }}
+                </div>
+
+
+                {# Zone à risque #}
+                <div class="tab-pane" id="v-pills-risk" role="tabpanel" aria-labelledby="v-pills-risk-tab">
+                    <h2>Zone à risque</h2>
+                    {% if user.idees|length %}
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#deleteAllIdees">Supprimer mes idées</button>
+                        {{  include('include/modal.html.twig', {'id_modal' : 'deleteAllIdees','title' : 'Supprimer toutes vos idées', 'route' : path('user_idees_delete')}) }}
+                    {% endif %}
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteUser">Supprimer mon compte</button>
+                    {{ include('include/modal.html.twig', {'id_modal' : 'deleteUser','title' : 'Supprimer votre compte', 'route' : path('user_delete') }) }}
+                </div>
+
             </div>
-            {{ form_end(formPwd) }}
         </div>
     </div>
 </div>

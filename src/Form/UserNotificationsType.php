@@ -18,18 +18,12 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserInfosType extends AbstractType
+class UserNotificationsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('lastname', TextType::class, ['label' => 'Nom'])
-            ->add('firstname', TextType::class, ['label' => 'Prénom'])
-            ->add('email', EmailType::class, ['label' => 'Email', 'required' => false])
-            ->add('birthdate', BirthdayType::class, ['label' => 'Date de naissance', 'placeholder' => array(
-                'year' => 'Année', 'month' => 'Mois', 'day' => 'Jour',
-            )])
-            ->add('username', TextType::class, ['label' => 'Identifiant'])
+            ->add('receiveEmailNewComment', CheckboxType::class, ['label' => 'Je veux être informé par mail lorsqu\'un membre ajoute un commentaire sur une de mes idées', 'required' => false])
             ->add('save', SubmitType::class, ['label' => 'Modifier'])
         ;
     }

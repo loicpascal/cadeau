@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Idee;
 use App\Entity\User;
 use App\Form\UserInfosType;
+use App\Form\UserNotificationsType;
 use App\Form\UserPwdType;
 use App\Form\UserType;
 use App\Service\UserAccessService;
@@ -117,6 +118,9 @@ class UserController extends Controller
         $formInfos = $this->createForm(UserInfosType::class, $user, [
             'action' => $this->generateUrl('user_update_infos', ['id' => $user->getId()])
         ]);
+        $formNotifications = $this->createForm(UserNotificationsType::class, $user, [
+            'action' => $this->generateUrl('user_update_notifications', ['id' => $user->getId()])
+        ]);
         $formPwd = $this->createForm(UserPwdType::class, $user, [
             'action' => $this->generateUrl('user_update_password', ['id' => $user->getId()])
         ]);
@@ -124,6 +128,7 @@ class UserController extends Controller
         return $this->render('user/update.html.twig', [
             'user' => $user,
             'formInfos' => $formInfos->createView(),
+            'formNotifications' => $formNotifications->createView(),
             'formPwd' => $formPwd->createView(),
         ]);
     }
@@ -142,6 +147,9 @@ class UserController extends Controller
         $formInfos = $this->createForm(UserInfosType::class, $user, [
             'action' => $this->generateUrl('user_update_infos', ['id' => $id])
         ]);
+        $formNotifications = $this->createForm(UserNotificationsType::class, $user, [
+            'action' => $this->generateUrl('user_update_notifications', ['id' => $user->getId()])
+        ]);
         $formPwd = $this->createForm(UserPwdType::class, $user, [
             'action' => $this->generateUrl('user_update_password', ['id' => $id])
         ]);
@@ -158,7 +166,48 @@ class UserController extends Controller
         return $this->render('user/update.html.twig', [
             'user' => $user,
             'formInfos' => $formInfos->createView(),
+            'formNotifications' => $formNotifications->createView(),
             'formPwd' => $formPwd->createView(),
+            'panel' => 'infos'
+        ]);
+    }
+
+    /**
+     * @Route("/user/{id}/updateNotifications", name="user_update_notifications", requirements={"id"="\d+"})
+     */
+    public function updateNotificationsAction(Request $request, $id) {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+
+        if (!$user || intval($id) !== $this->getUser()->getId()) {
+            return $this->redirectToRoute('user_list');
+        }
+
+        $formInfos = $this->createForm(UserInfosType::class, $user, [
+            'action' => $this->generateUrl('user_update_infos', ['id' => $id])
+        ]);
+        $formNotifications = $this->createForm(UserNotificationsType::class, $user, [
+            'action' => $this->generateUrl('user_update_notifications', ['id' => $user->getId()])
+        ]);
+        $formPwd = $this->createForm(UserPwdType::class, $user, [
+            'action' => $this->generateUrl('user_update_password', ['id' => $id])
+        ]);
+
+        $formNotifications->handleRequest($request);
+
+        if ($formNotifications->isSubmitted() && $formNotifications->isValid()) {
+            $em->flush();
+
+            $this->addFlash('successNotifsUpdate', 'Vos informations ont été modifiées avec succès !');
+            return $this->redirectToRoute('user_update', ['id' => $id]);
+        }
+
+        return $this->render('user/update.html.twig', [
+            'user' => $user,
+            'formInfos' => $formInfos->createView(),
+            'formNotifications' => $formNotifications->createView(),
+            'formPwd' => $formPwd->createView(),
+            'panel' => 'notifs'
         ]);
     }
 
@@ -175,6 +224,9 @@ class UserController extends Controller
 
         $formInfos = $this->createForm(UserInfosType::class, $user, [
             'action' => $this->generateUrl('user_update_infos', ['id' => $id])
+        ]);
+        $formNotifications = $this->createForm(UserNotificationsType::class, $user, [
+            'action' => $this->generateUrl('user_update_notifications', ['id' => $user->getId()])
         ]);
         $formPwd = $this->createForm(UserPwdType::class, $user, [
             'action' => $this->generateUrl('user_update_password', ['id' => $id])
@@ -198,7 +250,9 @@ class UserController extends Controller
         return $this->render('user/update.html.twig', [
             'user' => $user,
             'formInfos' => $formInfos->createView(),
+            'formNotifications' => $formNotifications->createView(),
             'formPwd' => $formPwd->createView(),
+            'panel' => 'password'
         ]);
     }
 
