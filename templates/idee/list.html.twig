@@ -6,7 +6,7 @@
 
     <h1>Mes idées{% if archived is defined %} archivées{% endif %} <span class="badge badge-primary">{{ idees|length }}</span></h1>
     {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
+        <div class="alert alert-success">{{ message|raw }}</div>
     {% endfor %}
     <div>
         {% if not idees %}
@@ -19,11 +19,11 @@
             </div>
             {% endif %}
         {%  else %}
-	
-	{% if archived is not defined %}
-	<a href="{{ path('idee_new') }}"><button type="button" class="btn btn-primary">Ajouter une idée</button></a>
-	<br><br>
-	{% endif %}
+
+        {% if archived is not defined %}
+        <a href="{{ path('idee_new') }}"><button type="button" class="btn btn-primary">Ajouter une idée</button></a>
+        <br><br>
+        {% endif %}
 
         <div class="listeCadeau">
             {% for idee in idees %}
@@ -50,7 +50,11 @@
                         {% if idee.archived %}
                             <a href="{{ path('idee_unarchive', {'id': idee.id}) }}" title="Désarchiver"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-archive"></i>&nbsp;Désarchiver</button></a>
                         {%  else %}
-                            <a href="{{ path('idee_archive', {'id': idee.id}) }}" title="Archiver"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-archive"></i>&nbsp;Archiver</button></a>
+                            <a href="{{ path('idee_archive', {'id': idee.id}) }}" title="Archiver">
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="🛈 Vous pourrez la désarchiver plus tard">
+                                    <i class="fas fa-archive"></i>&nbsp;Archiver
+                                </button>
+                            </a>
                         {% endif %}
                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteIdee{{ idee.id }}" title="Supprimer"><i class="fas fa-trash-alt"></i>&nbsp;Supprimer</button>
                         <!-- Modal -->

@@ -198,6 +198,8 @@ class IdeeController extends Controller
         $em->persist($idee);
         $em->flush();
 
+        $this->addFlash('success', 'L\'idée <b>' . $idee->getLibelle() . '</b> a bien été archivée');
+
         return $this->redirectToRoute('idee_archived_list');
     }
 
@@ -215,6 +217,8 @@ class IdeeController extends Controller
         $idee->setArchived(false);
         $em->persist($idee);
         $em->flush();
+
+        $this->addFlash('success', 'L\'idée <b>' . $idee->getLibelle() . '</b> fait de nouveau partie de vos idées en cours');
 
         return $this->redirectToRoute('idee_list');
     }
