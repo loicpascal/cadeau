@@ -160,15 +160,14 @@ class UserController extends Controller
             $em->flush();
 
             $this->addFlash('successInfosUpdate', 'Vos informations ont été modifiées avec succès !');
-            return $this->redirectToRoute('user_update', ['id' => $id]);
+            return $this->redirectToRoute('user_update', ['id' => $id, 'panel' => 'infos']);
         }
 
         return $this->render('user/update.html.twig', [
             'user' => $user,
             'formInfos' => $formInfos->createView(),
             'formNotifications' => $formNotifications->createView(),
-            'formPwd' => $formPwd->createView(),
-            'panel' => 'infos'
+            'formPwd' => $formPwd->createView()
         ]);
     }
 
@@ -199,15 +198,14 @@ class UserController extends Controller
             $em->flush();
 
             $this->addFlash('successNotifsUpdate', 'Vos informations ont été modifiées avec succès !');
-            return $this->redirectToRoute('user_update', ['id' => $id]);
+            return $this->redirectToRoute('user_update', ['id' => $id, 'panel' => 'notifs']);
         }
 
         return $this->render('user/update.html.twig', [
             'user' => $user,
             'formInfos' => $formInfos->createView(),
             'formNotifications' => $formNotifications->createView(),
-            'formPwd' => $formPwd->createView(),
-            'panel' => 'notifs'
+            'formPwd' => $formPwd->createView()
         ]);
     }
 
@@ -244,15 +242,14 @@ class UserController extends Controller
 
                 $this->addFlash('successPwdUpdate', 'Votre mot de passe a été modifié avec succès !');
             }
-            return $this->redirectToRoute('user_update', ['id' => $id]);
+            return $this->redirectToRoute('user_update', ['id' => $id, 'panel' => 'password']);
         }
 
         return $this->render('user/update.html.twig', [
             'user' => $user,
             'formInfos' => $formInfos->createView(),
             'formNotifications' => $formNotifications->createView(),
-            'formPwd' => $formPwd->createView(),
-            'panel' => 'password'
+            'formPwd' => $formPwd->createView()
         ]);
     }
 
